@@ -1,0 +1,14 @@
+CHIP DMux {
+    IN in, sel; //sel번째 자리에 in을 넣어서
+    OUT a, b; //그 두 수를 출력할 것이다.
+
+    //sel이 0이라면 in을 a에 넣는다.
+    //sel이 1이라면 in을 b에 넣는다.
+    PARTS:
+    Not(in=sel, out=notsel); //sel의 반대값을 저장
+    //sel이 0이었다면 a에 넣어야 한다는 것을 의미.
+    //즉, notsel이 1이 되면 a에 값을 넣는 것.
+    And(a=in, b=notsel, out=a);
+    //그 반대일 때에는 b에 값을 넣는 것.
+    And(a=in, b=sel, out=b);
+}

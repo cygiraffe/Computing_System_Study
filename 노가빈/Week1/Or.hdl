@@ -1,0 +1,10 @@
+CHIP Or {
+    IN a, b;
+    OUT out;
+		//a와 b 둘 다 0인 경우만 0을 출력
+    PARTS:
+    Not(in=a, out=nota); // a에 not연산하자. 
+    Not(in=b, out=notb); // b에 not연산하자.
+    //not a와 not b 둘 다 1인 경우만 0을 출력하도록 하자.
+    Nand(a=nota, b=notb, out=out);
+}

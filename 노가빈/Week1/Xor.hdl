@@ -1,0 +1,10 @@
+CHIP Xor { //칩 이름을 Xor로 한다.
+  IN a, b; // a와 b를 입력받는다.
+  OUT out; //out을 출력할 것이다.
+  PARTS: // 아래는 기능 기술.
+  Not (in=a, out=nota); //nota를 만든다.
+  Not (in=b, out=notb); //notb를 만든다.
+  And (a=a, b=notb, out=aAndNotb); //a와 notb를 and연산한다. aAndNotb를 만든다.
+  And (a=nota, b=b, out=notaAndb); //nota와 b를 and연산한다. notaAndb를 만든다.
+  Or (a=aAndNotb, b=notaAndb, out=out); //그 두 개의 값을 or연산한다. 그 값으로 out을 만든다.
+}
