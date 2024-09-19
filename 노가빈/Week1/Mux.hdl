@@ -1,0 +1,14 @@
+CHIP Mux {
+    IN a, b, sel;
+    OUT out;
+
+    PARTS:
+    //sel이 0인 경우에 a를 출력하자.
+    //sel이 1인 경우에 b를 출력하자.
+    Not(in=sel, out=notsel); //notsel을 먼저 만들자.
+    //sel이 0이라면(a를 출력하고자 한다면) notsel은 1이다.
+    And(a=a, b=notsel, out=asel); //a와 고른sel의 반대를 and연산하고
+    //sel이 1이라면(b를 출력하고자 한다면)
+    And(a=b, b=sel, out=bsel); //b와 고른sel을 and연산한다.
+    Or(a=asel, b=bsel, out=out); //asel과 bsel 둘 다 0이 아니라면 1을 출력하는 경우라 볼 수 있다.
+}

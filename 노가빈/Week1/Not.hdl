@@ -1,0 +1,9 @@
+CHIP Not {
+    IN in;
+    OUT out;
+
+    PARTS:
+    //0일 경우 1을 반환, 0과 0을 Nand연산하면 1출력
+    //1일 경우 0을 반환, 1과 1을 Nand연산하면 0출력
+    Nand(a=in, b=in, out=out);
+}

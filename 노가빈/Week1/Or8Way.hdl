@@ -1,0 +1,20 @@
+CHIP Or8Way {
+    IN in[8];
+    OUT out;
+
+    //순서대로 다 Or연산을 수행한다.
+    PARTS:
+    Or(a=in[0], b=in[1], out=tout0);
+    Or(a=in[2], b=in[3], out=tout1);
+    Or(a=in[4], b=in[5], out=tout2);
+    Or(a=in[6], b=in[7], out=tout3);
+
+    //순서대로 전부 Or연산을 수행 반복. 
+    //두 번씩 나누어 계속 수행하는 것.
+    //그렇다면 시간복잡도는 O(N)
+    Or(a=tout0, b=tout1, out=aout);
+    Or(a=tout2, b=tout3, out=bout);
+
+    //최종출력
+    Or(a=aout, b=bout, out=out);
+}

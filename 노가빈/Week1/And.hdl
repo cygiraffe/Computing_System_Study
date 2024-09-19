@@ -1,0 +1,10 @@
+CHIP And {
+    IN a, b;
+    OUT out;
+    PARTS:
+    //기본으로 있는 Nand를 사용
+    //Nand란? 둘 다 1인 경우만 0을 반환하는 칩
+    Nand(a=a, b=b, out=tout);
+    // 둘 다 1인 경우만 1을 반환하기 위해 Not연산을 사용
+    Not(in=tout, out=out);
+}
