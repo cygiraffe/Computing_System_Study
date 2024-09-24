@@ -18,4 +18,4 @@ zee 라는 이름의 브랜치를 만들고 싶다면:
 ```git commit -m "변경 사항 설명"```
 
 ## 원격 저장소에 브랜치 푸시하기
-```git push origin [브랜치 이름]```
+```git push origin [브랜치 이름]``` 
