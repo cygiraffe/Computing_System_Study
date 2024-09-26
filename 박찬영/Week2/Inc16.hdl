@@ -30,9 +30,10 @@ CHIP Inc16 {
     HalfAdder(a=in[14] , b=c13 , sum=out[14] , carry=c14 );
     HalfAdder(a=in[15] , b=c14 , sum=out[15] , carry=c15 );
     
-
-
-
-    
-
 }
+/*
+첫 Nand 연산의 결과값은 Inc 연산을 수행했을 때(=1을 더했을 때), out[0] 값을 나타냄.
+첫 And 연산의 결과값은 Inc 연산을 수행했을 때(=1을 더했을 때), 최하위 비트에서 올라가는 자리올림 비트 값을 나타냄.
+[1]번 인덱스, 두번째 자리부터는 HalfAdder를 통해서 자리올림 비트와 그 자리의 비트를 더해준다.
+연산의 결과 중에서 sum 값은 out[N]에 저장, carry는 =cN으로 저장해서 다음 자리의 HalfAdder에 parameter로 다시 넣어준다.  
+*/
