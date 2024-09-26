@@ -1,0 +1,9 @@
+CHIP HalfAdder { //반가산기 구현
+    IN a, b;    
+    OUT sum,    // sum은 a와 b중 하나만 1일 때 1이다. 즉, XOR연산수행
+        carry;  // carry는 a와 b 둘 다 1일 때 1오버되므로 AND연산수행
+
+    PARTS:
+    Xor(a=a, b=b, out=sum);
+    And(a=a, b=b, out=carry);
+}

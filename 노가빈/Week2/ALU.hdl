@@ -1,0 +1,53 @@
+CHIP ALU {
+    IN
+        x[16], y[16],  // 두 개의 16비트 데이터를 입력받음
+        zx, // 입력 x를 0으로
+        nx, // 입력 x를 반전시키기(not연산)
+        zy, // 입력 y를 0으로
+        ny, // 입력 y를 반전시키기(not연산)
+        f,  // 1이면 x랑 y를 더하고, 0이면 x와 y를 and연산시키기
+        no; // out을 반전(not연산)시키기
+
+    OUT
+        out[16], // 16비트 출력
+        zr, // out이 0이면 1, 아니면 0
+        ng; // out이 음수면 1, 아니면 0
+
+    PARTS:
+    Mux16(a=x, b=0, sel=zx, out=x1); //zx가 0이면 x그대로 반환, 1이면 0을 반환
+    Not16(in=x1, out=notx1); //x를 반전시킨 notx1을 만들고
+    Mux16(a=x1, b=notx1, sel=nx, out=x2); //nx가 0이면 x1그대로 반환, 1이면 반전한 notx1을 반환
+
+    //아래는 y를 똑같이 한 것
+    Mux16(a=y, b=0, sel=zy, out=y1);
+    Not16(in=y1, out=noty1);
+    Mux16(a=y1, b=noty1, sel=ny, out=y2);
+
+    //이제 덧셈연산과 and연산 수행
+    Add16(a=x2, b=y2, out=sumxy);
+    And16(a=x2, b=y2, out=andxy);
+
+    //f가 0이면 덧셈연산 수행한 것을 반환하고
+    //f가 1이면 and연산 수행한 것을 반환하기
+    Mux16(a=andxy, b=sumxy, sel=f, out=fout); 
+
+    //out을 반전시킨 변수를 하나 만든 후
+    Not16(in=fout, out=notfout);
+    // no가 0이면 그대로 반환, 1이면 반전시킨 변수를 반환
+    Mux16(a=fout, b=notfout, sel=no, out=noout);
+    // 이제 모르겠엉 ㅜㅜㅜ
+
+    //noout이 0이면 zr은 1이 되고 그 외에는 0이 됨. 그 외에는 1이 됨.
+    //noout이 0이라는 뜻은 모든 비트를 or연산했을 때의 결과가 0이라는 것
+    //모든비트 or연산하자.
+    //모든비트 or연산하려면 Or8Way를 사용해야 함. 그러므로 반씩 나누자
+    Or8Way(in=noout[0..7], out=ornoout1);
+    Or8Way(in=pout[8..15], out=ornoout2);
+    Or(a=ornoout1, b=ornoout2, out=ornoout3); //최종 or연산결과. 모든 비트를 or수행함
+    
+    Mux16(a=1, b=0, sel=ornoout3, out=zr);
+    //Not(in=ornoout3, out=zr); //이렇게도 가능하다
+
+    //noout이 0보다 작으면(맨 앞 비트가 1이면) ng는 1이 되고 그 외에는 0이 됨
+    Mux16(a=0, b=1, sel=noout[15], out=ng);
+}
