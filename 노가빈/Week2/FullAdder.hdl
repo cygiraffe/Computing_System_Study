@@ -1,0 +1,10 @@
+CHIP FullAdder {
+    IN a, b, c;  // 반가산기 두 번 수행해야 함
+    OUT sum,     // 세 수 중 1이 홀수개면 sum은 1이 됨
+        carry;   
+
+    PARTS:
+    HalfAdder(a=a, b=b, sum=s1, carry=c1); //반가산기 수행
+    HalfAdder(a=c, b=s1, sum=sum, carry=c2); //수행된 반가산기의 sum값과 c값으로 반가산기 두 번째 수행
+    Xor(a=c1, b=c2, out=carry); // 세 수 중 2개 이상이 1이면 carry는 1이 됨
+}
