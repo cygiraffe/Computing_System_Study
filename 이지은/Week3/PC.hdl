@@ -1,0 +1,38 @@
+// This file is part of www.nand2tetris.org
+// and the book "The Elements of Computing Systems"
+// by Nisan and Schocken, MIT Press.
+// File name: projects/3/a/PC.hdl
+/**
+ * A 16-bit counter.
+ * if      reset(t): out(t+1) = 0
+ * else if load(t):  out(t+1) = in(t)
+ * else if inc(t):   out(t+1) = out(t) + 1
+ * else              out(t+1) = out(t)
+ */
+CHIP PC {
+    IN in[16],load,inc,reset;
+    OUT out[16];
+
+    PARTS:
+    Or(a=inc, b=load, out=incorload); // inc와 load 신호의 OR 연산 결과를 저장
+    Or(a=incorload, b=reset, out=out0); // 상위의 결과값과 reset 신호를 저장 
+    
+
+    Inc16(in=rout, out=doneinc); // register의 out 값을 1 증가 
+
+    // if inc(t): out(t+1) = out(t) + 1
+    // inc 신호에 따라 증가된 값, 혹은 in 값
+    Mux16(a=in, b=doneinc, sel=inc, out=afterinc); 
+
+    // else if load(t): out(t+1) = in(t)
+    // load 신호에 따라 증가된 값, 혹은 in 값 
+    Mux16(a=afterinc, b=in, sel=load, out=afterload); 
+
+    // if reset(t): out(t+1) = 0
+    // reset 신호에 따라 afterload 값 또는 0(false)
+    Mux16(a=afterload, b=false, sel=reset, out=afterreset); 
+
+    // 최종 값을 레지스터에 저장. out0 신호에 따라 load 결정
+    Register(in=afterreset, load=out0, out=rout, out=out);
+}
+
