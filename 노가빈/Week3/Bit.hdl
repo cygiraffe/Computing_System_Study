@@ -1,0 +1,17 @@
+CHIP Bit {
+    IN in, load;
+    OUT out;
+
+    PARTS:
+    //a는 이전의 값, b는 현재 집어넣고 있는 값
+    //load가 0이라면(잠금상태라면) 이전의 값인 a을 선택하고,
+    //load가 1이라면(잠금해제상태라면) 현재 값인 b를 선택
+    //그리하여 muxout이라는 결과물을 만든 후
+    Mux(a=dffout, b=in, sel=load, out=muxout);
+
+    //그 결과물을 dff에 넣는다.
+    //out값을 dffout이라 칭하고 이를 이전의 값으로 쓴다.
+    //이렇게 하면, in값을 바꾸고 load값을 0으로 했을 때에(and tock)
+    //이전의 값인 dffout은 그대로 나오고 있는 것을 볼 수 있다.
+    DFF(in=muxout, out=dffout, out=out);
+}
