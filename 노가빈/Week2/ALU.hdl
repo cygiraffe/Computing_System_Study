@@ -14,12 +14,12 @@ CHIP ALU {
         ng; // out이 음수면 1, 아니면 0
 
     PARTS:
-    Mux16(a=x, b=0, sel=zx, out=x1); //zx가 0이면 x그대로 반환, 1이면 0을 반환
+    Mux16(a=x, b=false, sel=zx, out=x1); //zx가 0이면 x그대로 반환, 1이면 0을 반환
     Not16(in=x1, out=notx1); //x를 반전시킨 notx1을 만들고
     Mux16(a=x1, b=notx1, sel=nx, out=x2); //nx가 0이면 x1그대로 반환, 1이면 반전한 notx1을 반환
 
     //아래는 y를 똑같이 한 것
-    Mux16(a=y, b=0, sel=zy, out=y1);
+    Mux16(a=y, b=false, sel=zy, out=y1);
     Not16(in=y1, out=noty1);
     Mux16(a=y1, b=noty1, sel=ny, out=y2);
 
@@ -34,20 +34,17 @@ CHIP ALU {
     //out을 반전시킨 변수를 하나 만든 후
     Not16(in=fout, out=notfout);
     // no가 0이면 그대로 반환, 1이면 반전시킨 변수를 반환
-    Mux16(a=fout, b=notfout, sel=no, out=noout);
+    Mux16(a=fout, b=notfout, sel=no, out=noout, out[0..7] = tonoout1, out[8..15] = tonoout2, out[15]=ng, out=out);
     // 이제 모르겠엉 ㅜㅜㅜ
 
     //noout이 0이면 zr은 1이 되고 그 외에는 0이 됨. 그 외에는 1이 됨.
     //noout이 0이라는 뜻은 모든 비트를 or연산했을 때의 결과가 0이라는 것
     //모든비트 or연산하자.
     //모든비트 or연산하려면 Or8Way를 사용해야 함. 그러므로 반씩 나누자
-    Or8Way(in=noout[0..7], out=ornoout1);
-    Or8Way(in=pout[8..15], out=ornoout2);
+    Or8Way(in=tonoout1, out=ornoout1);
+    Or8Way(in=tonoout2, out=ornoout2);
     Or(a=ornoout1, b=ornoout2, out=ornoout3); //최종 or연산결과. 모든 비트를 or수행함
     
-    Mux16(a=1, b=0, sel=ornoout3, out=zr);
+    Mux(a=true, b=false, sel=ornoout3, out=zr);
     //Not(in=ornoout3, out=zr); //이렇게도 가능하다
-
-    //noout이 0보다 작으면(맨 앞 비트가 1이면) ng는 1이 되고 그 외에는 0이 됨
-    Mux16(a=0, b=1, sel=noout[15], out=ng);
 }
