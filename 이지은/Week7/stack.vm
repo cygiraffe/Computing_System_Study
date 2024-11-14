@@ -1,0 +1,14 @@
+push constant 266
+pop pointer 0
+push constant 1
+neg
+pop pointer 256
+push constant 1
+neg
+pop pointer 260
+push constant 1
+neg
+pop pointer 262
+push constant 91
+neg
+pop static 266
